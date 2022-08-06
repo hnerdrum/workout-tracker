@@ -4,19 +4,20 @@ import { validateDate, validateNumber } from './validators';
 import { SimpleInput } from './SimpleInput';
 import { SimpleTextArea } from './SimpleTextArea';
 import { SimpleSelect } from './SimpleSelect';
+import { getFormattedDate } from './selectors';
 
-type Workout = {
-  date: Date;
-  distance: number;
-  duration: number;
-  averageSpeed: number;
-  heartRate: number;
+type WorkoutFormData = {
+  date: string;
+  distance: string;
+  duration: string;
+  averageSpeed: string;
+  heartRate: string;
   mode: string;
-  rating: number;
+  rating: string;
   description: string;
 }
 
-export const WORKOUT_FIELDS: Record<keyof Workout, string> = {
+export const WORKOUT_FIELDS = {
   date: "date",
   distance: "distance",
   duration: "duration",
@@ -25,7 +26,7 @@ export const WORKOUT_FIELDS: Record<keyof Workout, string> = {
   mode: "mode",
   rating: "rating",
   description: "description",
-}
+} as const
 
 enum WorkoutMode {
   Slow = "Slow",
@@ -35,10 +36,16 @@ enum WorkoutMode {
 }
 
 function App() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<WorkoutFormData>();
 
-  const onSubmit = (workout: any) => {
-    console.log(workout)
+  const onSubmit = async (workout: WorkoutFormData) => {
+    await fetch('http://localhost:8080/api/v1/workouts', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...workout,
+        date: getFormattedDate(workout.date)
+      })
+    })
   }
 
   return (
@@ -63,7 +70,7 @@ function App() {
           {...register(WORKOUT_FIELDS.distance, {
             required: "This is required",
             min: { value: 0, message: "Workout distance must be greater than 0" },
-            validate: validateNumber 
+            validate: validateNumber
           })}
         />
 
@@ -107,7 +114,7 @@ function App() {
           label="What kind of workout was it?"
           options={Object.keys(WorkoutMode).map(mode => ({ label: mode, value: mode }))}
           errorMessage={errors.mode?.message as (string | undefined)}
-          {...register(WORKOUT_FIELDS.mode, { required: "This is required" })}
+          {...register(WORKOUT_FIELDS.mode, { required: "This is required", validate: (some) => true })}
         />
 
         <SimpleSelect
