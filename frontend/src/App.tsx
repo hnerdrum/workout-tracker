@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 import './index.css'
+import { WorkoutInput } from './WorkoutInput';
 
 type Workout = {
   date: Date;
@@ -12,7 +13,7 @@ type Workout = {
   description: string;
 }
 
-const WORKOUT_FIELDS: Record<keyof Workout, string> = {
+export const WORKOUT_FIELDS: Record<keyof Workout, string> = {
   date: "date",
   distance: "distance",
   duration: "duration",
@@ -45,19 +46,11 @@ function App() {
       </div>
       
       <div className="space-y-6 sm:space-y-5">
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label htmlFor={WORKOUT_FIELDS.date} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-            Date
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <input
-              type="datetime-local"
-              id={WORKOUT_FIELDS.date}
-              className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.date, { required: "This is required" })}
-            />
-          </div>
-        </div>
+        <WorkoutInput
+            label="Date"
+            type="datetime-local"
+            errorMessage="Your workout must have a date"
+        />
         <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
           <label htmlFor={WORKOUT_FIELDS.distance} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
             Distance (km)
@@ -156,7 +149,7 @@ function App() {
             <textarea
               id={WORKOUT_FIELDS.description}
               className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.description, { required: "This is required" })}
+              {...register(WORKOUT_FIELDS.description)}
             />
           </div>
         </div>
