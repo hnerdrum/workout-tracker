@@ -6,3 +6,6 @@ backend/.idea
 # Ignore Gradle build output directory
 build
 backend/build
+
+node_modules
+frontend/node_modules
