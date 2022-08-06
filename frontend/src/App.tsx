@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form'
 import './index.css'
-import { validateDate } from './validators';
-import { WorkoutInput } from './WorkoutInput';
+import { validateDate, validateNumber } from './validators';
+import { SimpleInput } from './SimpleInput';
+import { SimpleTextArea } from './SimpleTextArea';
+import { SimpleSelect } from './SimpleSelect';
 
 type Workout = {
   date: Date;
@@ -47,86 +49,78 @@ function App() {
       </div>
       
       <div className="space-y-6 sm:space-y-5">
-        <WorkoutInput
+        <SimpleInput
           label="Date"
           type="datetime-local"
           errorMessage={errors.date?.message as (string | undefined)}
           {...register(WORKOUT_FIELDS.date, { required: "This is required", validate: validateDate })}
         />
-        <WorkoutInput
+        <SimpleInput
           label="Distance"
-          type="number"
+          inputMode="numeric"
+          type="text"
           errorMessage={errors.distance?.message as (string | undefined)}
-          {...register(WORKOUT_FIELDS.distance, { required: "This is required", min: { value: 0, message: "Workout distance must be greater than 0" } })}
+          {...register(WORKOUT_FIELDS.distance, {
+            required: "This is required",
+            min: { value: 0, message: "Workout distance must be greater than 0" },
+            validate: validateNumber 
+          })}
         />
 
-        <WorkoutInput
+        <SimpleInput
           label="Duration"
-          type="number"
+          inputMode="numeric"
+          type="text"
           errorMessage={errors.duration?.message as (string | undefined)}
-          {...register(WORKOUT_FIELDS.duration, { required: "This is required", min: { value: 0, message: "Workout duration must be greater than 0" } })}
+          {...register(WORKOUT_FIELDS.duration, {
+            required: "This is required",
+            min: { value: 0, message: "Workout duration must be greater than 0" },
+            validate: validateNumber 
+          })}
         />
 
-        <WorkoutInput
+        <SimpleInput
           label="Average speed"
-          type="number"
+          inputMode="numeric"
+          type="text"
           errorMessage={errors.distance?.message as (string | undefined)}
-          {...register(WORKOUT_FIELDS.averageSpeed, { required: "This is required", min: { value: 0, message: "Average speed must be greater than 0" } })}
+          {...register(WORKOUT_FIELDS.averageSpeed, {
+            required: "This is required",
+            min: { value: 0, message: "Average speed must be greater than 0" },
+            validate: validateNumber 
+          })}
         />
 
-        <WorkoutInput
+        <SimpleInput
           label="Average heart rate"
-          type="number"
+          inputMode="numeric"
+          type="text"
           errorMessage={errors.heartRate?.message as (string | undefined)}
-          {...register(WORKOUT_FIELDS.heartRate, { required: "This is required", min: { value: 0, message: "Average heart rate must be greater than 0" } })}
+          {...register(WORKOUT_FIELDS.heartRate, {
+            required: "This is required",
+            min: { value: 0, message: "Average heart rate must be greater than 0" },
+            validate: validateNumber 
+          })}
         />
 
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label htmlFor={WORKOUT_FIELDS.mode} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-            Running mode
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <select
-              id={WORKOUT_FIELDS.mode}
-              className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.mode, { required: "This is required" })}
-            >
-              {Object.keys(WorkoutMode).map(mode => (
-                <option>{mode}</option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <SimpleSelect
+          label="What kind of workout was it?"
+          options={Object.keys(WorkoutMode).map(mode => ({ label: mode, value: mode }))}
+          errorMessage={errors.mode?.message as (string | undefined)}
+          {...register(WORKOUT_FIELDS.mode, { required: "This is required" })}
+        />
 
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label htmlFor={WORKOUT_FIELDS.rating} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-            Rate your workout
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <select
-              id={WORKOUT_FIELDS.rating}
-              className="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.rating, { required: "This is required" })}
-            >
-              {[5, 4, 3, 2, 1].map(n => (
-                <option>{n}</option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <SimpleSelect
+          label="Rate your workout"
+          options={[5, 4, 3, 2, 1].map(n => ({ label: n.toString(), value: n.toString() }))}
+          errorMessage={errors.rating?.message as (string | undefined)}
+          {...register(WORKOUT_FIELDS.rating, { required: "This is required" })}
+        />
 
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label htmlFor={WORKOUT_FIELDS.description} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-            Describe your workout in a few words
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <textarea
-              id={WORKOUT_FIELDS.description}
-              className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.description)}
-            />
-          </div>
-        </div>
+        <SimpleTextArea
+          label="Describe your workout in a few words"
+          {...register(WORKOUT_FIELDS.description)}
+        />
         <button
           type="submit"
           className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
