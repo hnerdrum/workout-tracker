@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 import './index.css'
+import { validateDate } from './validators';
 import { WorkoutInput } from './WorkoutInput';
 
 type Workout = {
@@ -47,66 +48,38 @@ function App() {
       
       <div className="space-y-6 sm:space-y-5">
         <WorkoutInput
-            label="Date"
-            type="datetime-local"
-            errorMessage={errors.date?.message}
-            {...register(WORKOUT_FIELDS.date, { required: "This is required" })}
+          label="Date"
+          type="datetime-local"
+          errorMessage={errors.date?.message as (string | undefined)}
+          {...register(WORKOUT_FIELDS.date, { required: "This is required", validate: validateDate })}
         />
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label htmlFor={WORKOUT_FIELDS.distance} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-            Distance (km)
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <input
-              type="number"
-              id={WORKOUT_FIELDS.distance}
-              className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.distance, { required: "This is required" })}
-            />
-          </div>
-        </div>
+        <WorkoutInput
+          label="Distance"
+          type="number"
+          errorMessage={errors.distance?.message as (string | undefined)}
+          {...register(WORKOUT_FIELDS.distance, { required: "This is required", min: { value: 0, message: "Workout distance must be greater than 0" } })}
+        />
 
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label htmlFor={WORKOUT_FIELDS.duration} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-            Duration (minutes)
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <input
-              type="number"
-              id={WORKOUT_FIELDS.duration}
-              className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.duration, { required: "This is required" })}
-            />
-          </div>
-        </div>
+        <WorkoutInput
+          label="Duration"
+          type="number"
+          errorMessage={errors.duration?.message as (string | undefined)}
+          {...register(WORKOUT_FIELDS.duration, { required: "This is required", min: { value: 0, message: "Workout duration must be greater than 0" } })}
+        />
 
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label htmlFor={WORKOUT_FIELDS.averageSpeed} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-            Average speed (km/h)
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <input
-              type="number"
-              id={WORKOUT_FIELDS.averageSpeed}
-              className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.averageSpeed, { required: "This is required" })}
-            />
-          </div>
-        </div>
+        <WorkoutInput
+          label="Average speed"
+          type="number"
+          errorMessage={errors.distance?.message as (string | undefined)}
+          {...register(WORKOUT_FIELDS.averageSpeed, { required: "This is required", min: { value: 0, message: "Average speed must be greater than 0" } })}
+        />
 
-        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-          <label htmlFor={WORKOUT_FIELDS.heartRate} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-            Average heart rate (bpm)
-          </label>
-          <div className="mt-1 sm:mt-0 sm:col-span-2">
-            <input
-              type="number"
-              id={WORKOUT_FIELDS.heartRate}
-              className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              {...register(WORKOUT_FIELDS.heartRate, { required: "This is required" })}
-            />
-          </div>
-        </div>
+        <WorkoutInput
+          label="Average heart rate"
+          type="number"
+          errorMessage={errors.heartRate?.message as (string | undefined)}
+          {...register(WORKOUT_FIELDS.heartRate, { required: "This is required", min: { value: 0, message: "Average heart rate must be greater than 0" } })}
+        />
 
         <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
           <label htmlFor={WORKOUT_FIELDS.mode} className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">

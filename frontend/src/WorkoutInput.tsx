@@ -1,4 +1,3 @@
-import { WORKOUT_FIELDS } from "./App"
 import React from "react";
 
 type InputProps = {
